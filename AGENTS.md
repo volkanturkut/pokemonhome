@@ -24,3 +24,6 @@ Instead, you MUST use the official devkitPro Docker image to compile the project
 
 If you need to run `make clean`, use:
 `sudo docker run --rm -v $(pwd):/src devkitpro/devkita64 make clean`
+
+## Anti-Hallucination & Reference Material
+I have cloned several reference repositories into the `./references/` directory. **You MUST read the source code in these directories before implementing related features to avoid hallucinating APIs.**
