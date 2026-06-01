@@ -8,6 +8,7 @@
 #include <switch.h>
 
 #include "save_manager.h"
+#include "injector/bcat_injector.h"
 
 // Main program entrypoint
 int main(int argc, char* argv[])
@@ -49,6 +50,7 @@ int main(int argc, char* argv[])
     u64 titleId = 0x0100ABF008968000; // Pokemon Sword
 
     printf("Press A to backup Pokemon Sword save.\n");
+    printf("Press X to Inject Event.\n");
     printf("Press + to exit.\n");
 
     // Main loop
@@ -63,6 +65,22 @@ int main(int argc, char* argv[])
 
         if (kDown & HidNpadButton_Plus)
             break; // break in order to return to hbmenu
+
+        if (kDown & HidNpadButton_X) {
+            u64 titleIdSV = 0x0100A3D008C5C000;
+            printf("Attempting to inject event for Title ID: 0x%016lx\n", titleIdSV);
+
+            if (saveManager.mountSave(titleIdSV, uid)) {
+                if (BCATManager::InjectEvent("sdmc:/PokeHome/events/test.wc9", "save")) {
+                    printf("Injection successful.\n");
+                } else {
+                    printf("Injection failed.\n");
+                }
+                saveManager.unmountSave();
+            } else {
+                printf("Failed to mount save.\n");
+            }
+        }
 
         if (kDown & HidNpadButton_A) {
             printf("Attempting to backup save for Title ID: 0x%016lx\n", titleId);
